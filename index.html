@@ -14,16 +14,18 @@
 
     $(document).ready(function(){
 
-
-        all_divs = ['urgent,not important','urgent and important','not urgent,not important','not urgent, important'];
-        for (var i = 0, len = all_divs.length; i < len; i++) {
-            name= all_divs[i];
-            new_div = '<div id="droppable'+name+'" class="droppable ui-widget-header"> <p>Drop here - '+name+'</p><ul></ul> </div>';
-
-            $(document.body).append(new_div);
+        urgent_levels  = 3;
+        important_levels = 2;
+        for (var counter_urgent = urgent_levels, len = 0; counter_urgent > len; counter_urgent--) {
+            for (var counter_importance = 0, len_important = important_levels; counter_importance < len_important; counter_importance++) {
+                name= 'Drop here - Urgent:' + (counter_urgent) + ' Importance:' + (counter_importance+1);
+                new_div = '<div id="droppable'+name+'" class="droppable ui-widget-header"> <p>Drop here - '+name+'</p><ul></ul> </div>';
+                
+                $(document.body).append(new_div);
+            }
+            $(document.body).append('<div style="clear:both"></div>');
         }
 
-        $(document.body).append('<div style="clear:both"></div>');
 
         temp= new Object();
         temp.name = 'Create YuGene for Jason';
@@ -49,9 +51,9 @@
 
         $(document.body).append('<ul id="initial_list"></ul>');
 
-        for (var i = 0, len = all_tasks.length; i < len; i++) {
-            name= all_tasks[i].name;
-            id= all_tasks[i].id;
+        for (var counter = 0, len = all_tasks.length; counter < len; counter++) {
+            name= all_tasks[counter].name;
+            id= all_tasks[counter].id;
             new_li = '<li id="draggable'+id+'" class="draggable">'+name+'</li>';
 
             $('#initial_list').append(new_li);

@@ -14,12 +14,28 @@
 
     $(document).ready(function(){
 
+
+        $('#final_report').click(function(){
+            list_of_draggables = $('.draggable');
+            for (var counter = 0, len = list_of_draggables.length; counter < len; counter++) {
+                draggable =$(list_of_draggables[counter]) ;
+                droppable_div = draggable.parents('.droppable');
+
+                urgent = $(droppable_div).attr('data-urgent');
+                important = $(droppable_div).attr('data-importance');
+                if (urgent != undefined){
+                    alert(urgent+':'+important + ':'+ draggable.html());
+                }
+            }
+        });
+
+
         urgent_levels  = 3;
         important_levels = 2;
         for (var counter_urgent = urgent_levels, len = 0; counter_urgent > len; counter_urgent--) {
             for (var counter_importance = 0, len_important = important_levels; counter_importance < len_important; counter_importance++) {
                 name= 'Drop here - Urgent:' + (counter_urgent) + ' Importance:' + (counter_importance+1);
-                new_div = '<div id="droppable'+name+'" class="droppable ui-widget-header"> <p>Drop here - '+name+'</p><ul></ul> </div>';
+                new_div = '<div data-urgent="'+counter_urgent+'" data-importance="'+(counter_importance+1)+'" id="droppable'+name+'" class="droppable ui-widget-header"> <p>Drop here - '+name+'</p><ul></ul> </div>';
                 
                 $(document.body).append(new_div);
             }
@@ -82,6 +98,8 @@
 <body>
 <!-- from https://jqueryui.com/droppable/#default -->
  
+
+<button id="final_report">Final Report</button>
  
 </body>
 </html>

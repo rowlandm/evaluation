@@ -25,6 +25,16 @@
             $(document.body).append(new_div);
         }
 
+        $(document.body).append('<div style="clear:both"></div>');
+
+        all_tasks = ['T#12131 - create YuGene for Jason','T#34224332 - create GEG troubleshoot','T#23141423 - create scPipe on Raijin'];
+
+        for (var i = 0, len = all_tasks.length; i < len; i++) {
+            name= all_tasks[i];
+            new_div = '<div id="draggable'+i+'" class="draggable"> <p>Drag here - '+name+'</p> </div>';
+
+            $(document.body).append(new_div);
+        }
 
 
         $( ".draggable" ).draggable();
@@ -43,10 +53,6 @@
 <!-- from https://jqueryui.com/droppable/#default -->
  
   
-<div  class="draggable ui-widget-content"> <p>T#XYZ - create YuGene for person X</p> </div>
-<div  class="draggable ui-widget-content"> <p>T#XYZ - create GEG troubleshoot for person X</p> </div>
-<div  class="draggable ui-widget-content"> <p>T#XYZ - create scPipe conda package for person X</p> </div>
-<div style="clear:both"></div>
  
 </body>
 </html>

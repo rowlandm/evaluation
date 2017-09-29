@@ -4,8 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>jQuery UI Droppable - Default functionality</title>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
   <style>
   .draggable { width: 150px; height: 40px; padding: 0.5em; font-size: 12px; float: left; margin: 10px 10px 10px 0; background-color: blue;}
   .droppable { width: 450px; height: 150px; padding: 0.5em; float: left; margin: 10px; background-color:orange;}
@@ -40,6 +38,7 @@
         $( ".draggable" ).draggable();
         $( ".droppable" ).droppable({
           drop: function( event, ui ) {
+            alert(ui.draggable.attr('id') + ui.draggable.html() + ' on ' + $(this).html());
             $( this )
               .addClass( "ui-state-highlight" )
               .find( "p" )

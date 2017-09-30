@@ -118,6 +118,9 @@
 
             new_li = create_new_li(new_id,new_name);
             $('#ul_for_new_li').append(new_li);
+            
+            $('#new_id').val('');
+            $('#new_name').val('');
             $( ".draggable" ).draggable();
 
         });

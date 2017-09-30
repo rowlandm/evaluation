@@ -70,12 +70,17 @@
             id= all_tasks[counter].id;
             importance = all_tasks[counter].importance;
             urgency = all_tasks[counter].urgency;
-
-            new_li = '<li id="draggable'+id+'" class="draggable">'+name+'</li>';
+            new_li = create_new_li(id,name);
             $('[data-urgent-important="'+urgency+'::'+importance+'"]').find("ul").append(new_li);
             
         }
 
+    }
+
+
+    function create_new_li(id,name){
+        new_li = '<li id="draggable'+id+'" class="draggable">'+name+'</li>';
+        return new_li;
     }
 
     $(document).ready(function(){
@@ -104,7 +109,7 @@
             id = ui.draggable.attr('id');
             name = ui.draggable.html() ;
 
-            new_li = '<li id="'+id+'" class="draggable">'+name+'</li>';
+            new_li = create_new_li(id,name);
             ui.draggable.remove();
 
             $( this ).find( "ul" ).append(new_li);

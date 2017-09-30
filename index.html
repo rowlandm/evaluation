@@ -83,26 +83,7 @@
         return new_li;
     }
 
-    $(document).ready(function(){
-
-
-        $('#final_report').click(function(){
-            run_final_report();
-        });
-
-        urgent_levels  = 3;
-        important_levels = 2;
-        setup_droppable_boxes(urgent_levels,important_levels);
-
-        set_tasks_from_json();
-
-        $('#reset_json').click(function(){
-            $( ".draggable" ).remove();
-            set_tasks_from_json();
-            $( ".draggable" ).draggable();
-        });
-
-        $( ".draggable" ).draggable();
+    function make_divs_droppable(){
         $( ".droppable" ).droppable({
           drop: function( event, ui ) {
 
@@ -116,6 +97,33 @@
             $( ".draggable" ).draggable();
           }
         });
+    }
+    
+    function setup_click_to_redraw_using_json(){
+        $('#reset_json').click(function(){
+            $( ".draggable" ).remove();
+            set_tasks_from_json();
+            $( ".draggable" ).draggable();
+        });
+
+    }
+
+    $(document).ready(function(){
+
+
+        $('#final_report').click(function(){
+            run_final_report();
+        });
+
+        urgent_levels  = 3;
+        important_levels = 2;
+        setup_droppable_boxes(urgent_levels,important_levels);
+
+        set_tasks_from_json();
+
+        $( ".draggable" ).draggable();
+        make_divs_droppable();
+        setup_click_to_redraw_using_json();
   } );
   </script>
 </head>

@@ -105,12 +105,10 @@
             name = ui.draggable.html() ;
 
             new_li = '<li id="'+id+'" class="draggable">'+name+'</li>';
-
-            $( this )
-              .find( "ul" )
-                .append(new_li);
-            $( ".draggable" ).draggable();
             ui.draggable.remove();
+
+            $( this ).find( "ul" ).append(new_li);
+            $( ".draggable" ).draggable();
           }
         });
   } );

@@ -19,21 +19,33 @@
 
         $('#final_report').click(function(){
             list_of_draggables = $('.draggable');
-            json_export = '';
+            json_export_array = new Array();
             for (var counter = 0, len = list_of_draggables.length; counter < len; counter++) {
                 draggable =$(list_of_draggables[counter]) ;
                 droppable_div = draggable.parents('.droppable');
                 name = draggable.html();
                 raw_id = draggable.attr('id');
                 id = raw_id.replace('draggable','');
-                urgent = $(droppable_div).attr('data-urgent-important');
-                if (urgent != undefined){
-                    alert(urgent+':'+ id + name);
+                urgent_important = $(droppable_div).attr('data-urgent-important');
+                if (urgent_important != undefined){
+                    temp = urgent_important.split('::');
+                    urgent = temp[0];
+                    important = temp[1];
+                    
+                    task = new Object();
+                    task.id = id;
+                    task.name = name;
+                    task.urgency = urgent;
+                    task.importance = important;
+
+                    json_export_array.push(task);
                 } 
             }
 
+            json_export = JSON.stringify(json_export_array);
 
 
+            alert(json_export);
         });
 
 

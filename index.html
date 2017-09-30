@@ -35,7 +35,7 @@
         for (var counter_urgent = urgent_levels, len = 0; counter_urgent > len; counter_urgent--) {
             for (var counter_importance = 0, len_important = important_levels; counter_importance < len_important; counter_importance++) {
                 name= 'Drop here - Urgent:' + (counter_urgent) + ' Importance:' + (counter_importance+1);
-                new_div = '<div data-urgent="'+counter_urgent+'" data-importance="'+(counter_importance+1)+'" id="droppable'+name+'" class="droppable ui-widget-header"> <p>Drop here - '+name+'</p><ul></ul> </div>';
+                new_div = '<div data-urgent-important="'+counter_urgent+'::'+(counter_importance+1)+'" id="droppable'+name+'" class="droppable ui-widget-header"> <p>Drop here - '+name+'</p><ul></ul> </div>';
                 
                 $(document.body).append(new_div);
             }
@@ -43,36 +43,19 @@
         }
 
 
-        temp= new Object();
-        temp.name = 'Create YuGene for Jason';
-        temp.id = 12131;
-        temp.urgency = 2;
-        temp.importance = 2;
-        all_tasks = new Array();
-        all_tasks.push(temp);
+        all_tasks_json = '[{"name":"Create YuGene for Jason","id":12131,"urgency":3,"importance":2},{"name":"Setup scPipe on Raijin","id":12134,"urgency":2,"importance":2},{"name":"Troubleshoot GEG","id":12135,"urgency":1,"importance":1}]' 
 
-        temp= new Object();
-        temp.name = 'Setup scPipe on Raijin';
-        temp.id = 12134;
-        temp.urgency = 1;
-        temp.importance = 1;
-        all_tasks.push(temp);
-
-        temp= new Object();
-        temp.name = 'Troubleshoot GEG';
-        temp.id = 12135;
-        temp.urgency = 1;
-        temp.importance = 1;
-        all_tasks.push(temp);
-
-        $(document.body).append('<ul id="initial_list"></ul>');
+        all_tasks = JSON.parse(all_tasks_json)
 
         for (var counter = 0, len = all_tasks.length; counter < len; counter++) {
             name= all_tasks[counter].name;
             id= all_tasks[counter].id;
-            new_li = '<li id="draggable'+id+'" class="draggable">'+name+'</li>';
+            importance = all_tasks[counter].importance;
+            urgency = all_tasks[counter].urgency;
 
-            $('#initial_list').append(new_li);
+            new_li = '<li id="draggable'+id+'" class="draggable">'+name+'</li>';
+            $('[data-urgent-important="'+urgency+'::'+importance+'"]').find("ul").append(new_li);
+            
         }
 
 

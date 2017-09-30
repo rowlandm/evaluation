@@ -12,21 +12,28 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script>
 
+
+
     $(document).ready(function(){
 
 
         $('#final_report').click(function(){
             list_of_draggables = $('.draggable');
+            json_export = '';
             for (var counter = 0, len = list_of_draggables.length; counter < len; counter++) {
                 draggable =$(list_of_draggables[counter]) ;
                 droppable_div = draggable.parents('.droppable');
-
-                urgent = $(droppable_div).attr('data-urgent');
-                important = $(droppable_div).attr('data-importance');
+                name = draggable.html();
+                raw_id = draggable.attr('id');
+                id = raw_id.replace('draggable','');
+                urgent = $(droppable_div).attr('data-urgent-important');
                 if (urgent != undefined){
-                    alert(urgent+':'+important + ':'+ draggable.html());
-                }
+                    alert(urgent+':'+ id + name);
+                } 
             }
+
+
+
         });
 
 
@@ -66,7 +73,7 @@
             id = ui.draggable.attr('id');
             name = ui.draggable.html() ;
 
-            new_li = '<li id="draggable'+id+'" class="draggable">'+name+'</li>';
+            new_li = '<li id="'+id+'" class="draggable">'+name+'</li>';
 
             $( this )
               .find( "ul" )

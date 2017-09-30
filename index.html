@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>jQuery UI Droppable - Default functionality</title>
   <style>
-  .draggable { width: 350px;  padding: 0.1em; font-size: 12px;  background-color: grey;}
-  .droppable { width: 450px; height: 150px; padding: 0.5em; float: left; margin: 10px; background-color:orange;}
+    input, button {margin-top: 20px;margin-bottom:20px;}
+    .draggable { width: 350px;  padding: 0.1em; font-size: 12px;  background-color: grey;}
+    .droppable { width: 450px; height: 150px; padding: 0.5em; float: left; margin: 10px; background-color:orange;}
   </style>
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -108,6 +109,21 @@
 
     }
 
+    function setup_click_for_add_new_task(){
+
+        $('#add_new_li').click(function(){
+            
+            new_id = $('#new_id').val();
+            new_name = $('#new_name').val();
+
+            new_li = create_new_li(new_id,new_name);
+            $('#ul_for_new_li').append(new_li);
+            $( ".draggable" ).draggable();
+
+        });
+    }
+
+
     $(document).ready(function(){
 
 
@@ -124,17 +140,27 @@
         $( ".draggable" ).draggable();
         make_divs_droppable();
         setup_click_to_redraw_using_json();
+
+        setup_click_for_add_new_task();
+
   } );
   </script>
 </head>
 <body>
 <!-- from https://jqueryui.com/droppable/#default -->
-<textarea id="set_json" style="width:400px;height:200px;">
+<textarea id="set_json" style="width:400px;height:200px;float:left;">
 [{"id":"12131","name":"Create YuGene for Jason","urgency":"3","importance":"1"},{"id":"12134","name":"Setup scPipe on Raijin","urgency":"2","importance":"2"},{"id":"12135","name":"Troubleshoot GEG","urgency":"1","importance":"1"}]
 </textarea> 
+<div style="clear:both"></div>
 
 <button id="reset_json">Reset JSON </button>
 <button id="final_report">Final Report</button>
+<div style="clear:both"></div>
+<input id="new_id" placeholder="id" type="text"></input>
+<input id="new_name" placeholder="name" type="text"></input>
+<button id="add_new_li">Add New Task</button>
+
+<ul id="ul_for_new_li"></ul>
 <div style="clear:both"></div>
  
 </body>

@@ -12,7 +12,6 @@
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script>
-
     function run_final_report(){
 
         list_of_draggables = $('.draggable');
@@ -20,7 +19,7 @@
         for (var counter = 0, len = list_of_draggables.length; counter < len; counter++) {
             draggable =$(list_of_draggables[counter]) ;
             droppable_div = draggable.parents('.droppable');
-            name = draggable.html();
+            name = draggable.children('span').html();
             raw_id = draggable.attr('id');
             id = raw_id.replace('draggable','');
             urgent_important = $(droppable_div).attr('data-urgent-important');
@@ -80,8 +79,14 @@
 
 
     function create_new_li(id,name){
-        new_li = '<li id="draggable'+id+'" class="draggable">'+name+'</li>';
+        url = 'http://agile.stemformatics.org/agile_org/tasks/view/'+encodeURI(id);
+        new_li = '<li id="'+id+'" class="draggable"><span>'+name+'</span><a target="_blank" href="'+url+'">agile_org</a></li>';
         return new_li;
+    }
+
+    function setup_new_li_triggers(){
+        $( ".draggable" ).draggable();
+
     }
 
     function make_divs_droppable(){
@@ -95,7 +100,7 @@
             ui.draggable.remove();
 
             $( this ).find( "ul" ).append(new_li);
-            $( ".draggable" ).draggable();
+            setup_new_li_triggers();
           }
         });
     }
@@ -104,7 +109,7 @@
         $('#reset_json').click(function(){
             $( ".draggable" ).remove();
             set_tasks_from_json();
-            $( ".draggable" ).draggable();
+            setup_new_li_triggers();
         });
 
     }
@@ -121,7 +126,7 @@
             
             $('#new_id').val('');
             $('#new_name').val('');
-            $( ".draggable" ).draggable();
+            setup_new_li_triggers();
 
         });
     }
@@ -140,7 +145,7 @@
 
         set_tasks_from_json();
 
-        $( ".draggable" ).draggable();
+        setup_new_li_triggers();
         make_divs_droppable();
         setup_click_to_redraw_using_json();
 
@@ -152,7 +157,7 @@
 <body>
 <!-- from https://jqueryui.com/droppable/#default -->
 <textarea id="set_json" style="width:400px;height:200px;float:left;">
-[{"id":"12131","name":"Create YuGene for Jason","urgency":"3","importance":"1"},{"id":"12134","name":"Setup scPipe on Raijin","urgency":"2","importance":"2"},{"id":"12135","name":"Troubleshoot GEG","urgency":"1","importance":"1"}]
+[{"id":"2487","name":"BPA Landing Page","urgency":"3","importance":"1"},{"id":"2767","name":"scPipe on Raijin","urgency":"3","importance":"1"},{"id":"2753","name":"PCA plots integrated","urgency":"3","importance":"2"},{"id":"2753","name":"Report Upload","urgency":"3","importance":"2"},{"id":"2761","name":"YuGene for Jason Ivanusic","urgency":"3","importance":"2"},{"id":"2730","name":"Omicxview UX improvements","urgency":"3","importance":"2"},{"id":"2746","name":"scRNASeq hosting","urgency":"2","importance":"1"},{"id":"2741","name":"Store gene lists in Report","urgency":"2","importance":"1"},{"id":"2580","name":"Protein Mapping","urgency":"2","importance":"2"},{"id":"draggable","name":"Ensembl Upgrade","urgency":"2","importance":"2"},{"id":"draggable","name":"Omicxview with protein/transcriptomic data","urgency":"2","importance":"2"},{"id":"draggabledraggable","name":"New species","urgency":"2","importance":"2"},{"id":"draggable","name":"Pylons to Pyramid","urgency":"1","importance":"2"},{"id":"draggable","name":"PHP Validator","urgency":"1","importance":"2"}]
 </textarea> 
 <div style="clear:both"></div>
 

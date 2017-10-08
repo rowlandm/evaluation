@@ -86,16 +86,30 @@
     }
 
 
-    function create_new_li(id,name){
-        url = 'http://agile.stemformatics.org/agile_org/tasks/view/'+encodeURI(id);
-        new_li = '<li id="'+id+'" class="draggable"><span>'+name+'</span> <a target="_blank" href="'+url+'">agile_org</a></li>';
+    function create_new_li(new_id,name){
+        if (new_id != undefined && new_id != ''){
+            url = 'http://agile.stemformatics.org/agile_org/tasks/view/'+encodeURI(new_id);
+            agile_org_html = '<a target="_blank" href="'+url+'">Agile</a>';
+        } else {
+            agile_org_html = '';
+        }
+        delete_html = '<a class="delete" href="#!">Del</a>';
+        new_li = '<li id="'+new_id+'" class="draggable"><span>'+name+'</span> '+ agile_org_html +' ' + delete_html + ' </li>';
         return new_li;
     }
 
     function setup_new_li_triggers(){
         $( ".draggable" ).draggable();
-
+        delete_li_trigger();
     }
+
+
+    function delete_li_trigger(){
+        $("a.delete").click(function(){
+            $(this).parent().remove();
+        });
+    }
+
 
     function make_divs_droppable(){
         $( ".droppable" ).droppable({

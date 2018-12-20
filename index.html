@@ -50,14 +50,20 @@
 
         levels = new Array(); 
         levels[0] = 'Undefined';
-        levels[1] = 'Low';
-        levels[2] = 'High';
-        levels[3] = 'Very High';
+        levels[1] = 'Quality and Impact';
+        levels[2] = 'Engagement';
+        levels[3] = 'Activity';
+
+        top_columns = new Array(); 
+	top_columns[0] = 'Undefined'; 
+	top_columns[1] = 'Academic-led'; 
+	top_columns[2] = 'Use of Resources'; 
+	top_columns[3] = 'Visibility'; 
 
 
         for (var counter_urgent = urgent_levels, len = 0; counter_urgent > len; counter_urgent--) {
             for (var counter_importance = 0, len_important = important_levels; counter_importance < len_important; counter_importance++) {
-                name= 'Urgent:' + levels[counter_urgent] + ' Importance:' + levels[(counter_importance+1)];
+                name= 'Dimension:' + levels[counter_urgent] + ' Domain:' + top_columns[(counter_importance+1)];
                 new_div = '<div data-urgent-important="'+counter_urgent+'::'+(counter_importance+1)+'" id="droppable'+name+'" class="droppable ui-widget-header"> <p>'+name+'</p><ul></ul> </div>';
                 
                 $(document.body).append(new_div);
@@ -71,8 +77,7 @@
 
     function set_tasks_from_json(){
         all_tasks_json =$('#set_json').val();
-        all_tasks = JSON.parse(all_tasks_json)
-
+        all_tasks = JSON.parse(all_tasks_json) 
         for (var counter = 0, len = all_tasks.length; counter < len; counter++) {
             name= all_tasks[counter].name;
             id= all_tasks[counter].id;
@@ -188,7 +193,7 @@
         });
 
         urgent_levels  = 3;
-        important_levels = 2;
+        important_levels = 3;
         setup_droppable_boxes(urgent_levels,important_levels);
 
         set_tasks_from_json();
@@ -219,7 +224,7 @@
 <button id="bulk_create_new_lists">Bulk Create New Lists</button>
 <div style="clear:both"></div>
 <textarea id="set_json">
-[{"id":"","name":"Identify on-rampers","urgency":"3","importance":"2"},{"id":"","name":"PMC workshop for data storage","urgency":"3","importance":"2"},{"id":"","name":"Survey / use case form / pre workshop","urgency":"3","importance":"2"},{"id":"","name":"Use cases for MDHS","urgency":"2","importance":"1"},{"id":"","name":"Small HPC users workshop for data storage","urgency":"2","importance":"1"},{"id":"","name":"Island hoppping 10 mhds researchers at a time that nominate others","urgency":"2","importance":"1"},{"id":"","name":"Follow up Jane Elith and other Eco people","urgency":"2","importance":"2"},{"id":"undefined","name":"Call Pru to organise UoM people who use masters?","urgency":"1","importance":"1"}]
+[{"id":"undefined","name":"Provided visualisations of archetypes for some faculties","urgency":"3","importance":"1"},{"id":"","name":"Synthesised LSCeg needs in one document","urgency":"3","importance":"1"},{"id":"","name":"Organised bibliograph of Definitive Documents similar to papers and citations","urgency":"3","importance":"1"},{"id":"","name":"Asked for strategic plans from ADRs of each faculty","urgency":"3","importance":"1"},{"id":"","name":"Provided suggestions for members of the DRP","urgency":"3","importance":"1"},{"id":"","name":"Highlighted lack of consistency with engagement/ToR of expert groups","urgency":"2","importance":"1"},{"id":"","name":"Highlighted lack of academics on RDM","urgency":"2","importance":"1"},{"id":"undefined","name":"Good feedback from PCI team around visualisation of archetypes","urgency":"1","importance":"1"},{"id":"","name":"Excellent feedback from MCRIP platform manager in helping to bridge gap between them and US in change management situation","urgency":"1","importance":"1"}]
 </textarea> 
 <div style="clear:both"></div>
 <button id="clear_all">Clear All</button>

@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>jQuery UI Droppable - Default functionality</title>
   <style>
+    body { color:white;font-family:calibri;}
     textarea {width:400px;height:100px;float:left}
     input, button {margin-top: 20px;margin-bottom:20px;}
-    .draggable { width: 350px;  padding: 0.1em; font-size: 12px;  background-color: grey;}
-    .droppable { width: 450px; height: 350px; padding: 0.5em; float: left; margin: 10px; background-color:orange;}
+    .draggable { width: 350px;  padding: 0.1em; font-size: 12px;  background-color: #5e93b3;}
+    .droppable { width: 450px; height: 350px; padding: 0.5em; float: left; margin: 10px; background-color:#094183;}
   </style>
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -92,13 +93,8 @@
 
 
     function create_new_li(new_id,name){
-        if (new_id != undefined && new_id != ''){
-            url = 'http://agile.stemformatics.org/agile_org/tasks/view/'+encodeURI(new_id);
-            agile_org_html = '<a target="_blank" href="'+url+'">Agile</a>';
-        } else {
-            agile_org_html = '';
-        }
-        delete_html = '<a class="delete" href="#!">Del</a>';
+        agile_org_html = '';
+        delete_html = '<a class="delete" href="#!">[X]</a>';
         new_li = '<li id="'+new_id+'" class="draggable"><span>'+name+'</span> '+ agile_org_html +' ' + delete_html + ' </li>';
         return new_li;
     }

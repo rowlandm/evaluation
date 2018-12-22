@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Droppable - Default functionality</title>
+  <style>
+    #header {background-color: #094183;}
+    div.dark { color:black;font-family:calibri;}
+    body { color:white;font-family:calibri;}
+    textarea {width:400px;height:100px;float:left}
+    input, button {margin-top: 20px;margin-bottom:20px;}
+    .draggable { width: 350px;  padding: 0.1em; font-size: 12px;  background-color: #5e93b3;}
+    .droppable { border-radius: 4px; width: 450px; height: 350px; padding: 0.5em; float: left; margin: 10px; background-color:#094183;}
+  </style>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+    function run_final_report(){
+
+        list_of_draggables = $('.draggable');
+        json_export_array = new Array();
+        for (var counter = 0, len = list_of_draggables.length; counter < len; counter++) {
+            draggable =$(list_of_draggables[counter]) ;
+            droppable_div = draggable.parents('.droppable');
+            name = draggable.children('span').html();
+            raw_id = draggable.attr('id');
+            id = raw_id.replace('draggable','');
+            urgent_important = $(droppable_div).attr('data-urgent-important');
+            if (urgent_important != undefined){
+                temp = urgent_important.split('::');
+                urgent = temp[0];
+                important = temp[1];
+                
+                task = new Object();
+                task.id = id;
+                task.name = name;
+                task.urgency = urgent;
+                task.importance = important;
+
+                json_export_array.push(task);
+            } 
+        }
+
+        json_export = JSON.stringify(json_export_array);
+
+
+        $('#set_json').val(json_export);
+
+    }
+
+    function setup_droppable_boxes(urgent_levels,important_levels){
+
+        levels = new Array(); 
+        levels[0] = 'Undefined';
+        levels[1] = 'Quality and Impact';
+        levels[2] = 'Engagement';
+        levels[3] = 'Activity';
+
+        top_columns = new Array(); 
+	top_columns[0] = 'Undefined'; 
+	top_columns[1] = 'Valued Service'; 
+	top_columns[2] = 'Communities of Practice'; 
+	top_columns[3] = 'Visibility'; 
+
+
+        for (var counter_urgent = urgent_levels, len = 0; counter_urgent > len; counter_urgent--) {
+            for (var counter_importance = 0, len_important = important_levels; counter_importance < len_important; counter_importance++) {
+                name= 'Dimension:' + levels[counter_urgent] + ' Domain:' + top_columns[(counter_importance+1)];
+                new_div = '<div data-urgent-important="'+counter_urgent+'::'+(counter_importance+1)+'" id="droppable'+name+'" class="droppable ui-widget-header"> <p>'+name+'</p><ul></ul> </div>';
+                
+                $('#blocks').append(new_div);
+            }
+            $('#blocks').append('<div style="clear:both"></div>');
+        }
+
+
+
+    }
+
+    function set_tasks_from_json(){
+        all_tasks_json =$('#set_json').val();
+        all_tasks = JSON.parse(all_tasks_json) 
+        for (var counter = 0, len = all_tasks.length; counter < len; counter++) {
+            name= all_tasks[counter].name;
+            id= all_tasks[counter].id;
+            importance = all_tasks[counter].importance;
+            urgency = all_tasks[counter].urgency;
+            new_li = create_new_li(id,name);
+            $('[data-urgent-important="'+urgency+'::'+importance+'"]').find("ul").append(new_li);
+            
+        }
+
+    }
+
+
+    function create_new_li(new_id,name){
+        agile_org_html = '';
+        delete_html = '<a class="delete" href="#!">[X]</a>';
+        new_li = '<li id="'+new_id+'" class="draggable"><span>'+name+'</span> '+ agile_org_html +' ' + delete_html + ' </li>';
+        return new_li;
+    }
+
+    function setup_new_li_triggers(){
+        $( ".draggable" ).draggable();
+        delete_li_trigger();
+    }
+
+
+    function delete_li_trigger(){
+        $("a.delete").click(function(){
+            $(this).parent().remove();
+        });
+    }
+
+
+    function make_divs_droppable(){
+        $( ".droppable" ).droppable({
+          drop: function( event, ui ) {
+
+            id = ui.draggable.attr('id');
+            name = ui.draggable.children('span').html();
+
+            new_li = create_new_li(id,name);
+            ui.draggable.remove();
+
+            $( this ).find( "ul" ).append(new_li);
+            setup_new_li_triggers();
+          }
+        });
+    }
+    
+    function setup_click_to_redraw_using_json(){
+        $('#reset_json').click(function(){
+            $( ".draggable" ).remove();
+            set_tasks_from_json();
+            setup_new_li_triggers();
+        });
+
+    }
+
+    function clear_all(){
+        
+        $('#set_json').val('');
+        $( ".draggable" ).remove();
+        set_tasks_from_json();
+        setup_new_li_triggers();
+    }
+
+
+    function setup_click_for_add_new_task(){
+
+        $('#add_new_li').click(function(){
+            
+            new_id = $('#new_id').val();
+            new_name = $('#new_name').val();
+
+            new_li = create_new_li(new_id,new_name);
+            $('#ul_for_new_li').append(new_li);
+            
+            $('#new_id').val('');
+            $('#new_name').val('');
+            setup_new_li_triggers();
+
+        });
+    }
+
+    function bulk_create_new_lists(){
+
+        temp_text = $('#bulk_new_lists').val();
+        temp_array = temp_text.split('\n');
+
+        for (var counter = 0, len = temp_array.length; counter < len; counter++) {
+            new_name = temp_array[counter];
+            if (new_name != ''){
+                new_id = '';
+                new_li = create_new_li(new_id,new_name);
+                $('#ul_for_new_li').append(new_li);
+                
+            }
+        }
+
+        setup_new_li_triggers();
+
+    }
+
+    $(document).ready(function(){
+
+        $('#final_report').click(function(){
+            run_final_report();
+        });
+
+        urgent_levels  = 3;
+        important_levels = 3;
+        setup_droppable_boxes(urgent_levels,important_levels);
+
+        set_tasks_from_json();
+
+        setup_new_li_triggers();
+        make_divs_droppable();
+        setup_click_to_redraw_using_json();
+
+        setup_click_for_add_new_task();
+
+        $('#bulk_create_new_lists').click(function(){
+            bulk_create_new_lists();
+        });
+
+        $('#clear_all').click(function(){
+            clear_all();
+        });
+
+
+  } );
+  </script>
+</head>
+<body>
+
+	<div id="header" style="width:auto; height:150px;"><img style="height:150px;float:left;" src="https://brandhub.unimelb.edu.au/guidelines/logos/04_Logo_Vertical-Housed.jpg"> <span style="line-height:150px;font-size:40px;margin-left: 80px;" id="title">PCI Workforce Evaluation</span></div>
+<div style="clear:both"></div>
+
+<textarea style="margin-top:40px;" id="bulk_new_lists" placeholder="Put tasks on different lines">
+</textarea>
+<div style="clear:both"></div>
+<button id="bulk_create_new_lists">Bulk Create New Lists</button>
+<div style="clear:both"></div>
+
+<div id="text_for_pci_eval" class="dark">
+	<ul>
+		<li>Valued Service claim: Research Data Specialists provide advice, support and development to researchers that is valued.</li>
+		<li>Communities of Practice claim: Research Data Specialists help to strengthen communities of practice through active collaboration, networking and membership across all research areas.</li>
+		<li>Visibility claim: Research Data Specialists use their wide engagement networks to enhance leadership and visibility of data intensive research. </li>
+	</ul>
+</div>
+<div style="clear:both"></div>
+
+
+<ul id="ul_for_new_li"></ul>
+<div style="clear:both"></div>
+<div id="blocks"> </div> 
+
+<!-- from https://jqueryui.com/droppable/#default -->
+<div style="clear:both"></div>
+
+<div class="dark"> This is the report in JSON so you can back it up and restore</div>
+
+<textarea id="set_json">
+[{"id":"","name":"Faculty Primers","urgency":"3","importance":"1"},{"id":"","name":"Wrote up researcher capabilities document to map service roadmap activities into research language","urgency":"3","importance":"1"},{"id":"","name":"Setup of Expectations document for researcher engagement","urgency":"3","importance":"1"},{"id":"undefined","name":"LIEF workshop data management suggestions","urgency":"3","importance":"1"},{"id":"","name":"Recommended focus on non-STEM faculties","urgency":"3","importance":"2"},{"id":"","name":"Helped at meeting of RSEs","urgency":"3","importance":"3"},{"id":"","name":"Helped at meeting of ABACBS BioIT meeting","urgency":"3","importance":"3"},{"id":"","name":"Helped with suggestions ABACBS BioIT meeting ","urgency":"3","importance":"3"},{"id":"","name":"Organising RSE community in AU/NZ","urgency":"3","importance":"3"},{"id":"undefined","name":"Provided helpful suggestions for Dr Tom Daly around DEM-DEC","urgency":"2","importance":"1"},{"id":"","name":"Provided feedback for Donna Hensler and the short film archive.","urgency":"2","importance":"1"},{"id":"undefined","name":"Helped US engage with researchers around HPC/Storage review","urgency":"2","importance":"2"},{"id":"","name":"Organised a faculty IT sysadmin catchup","urgency":"2","importance":"2"},{"id":"","name":"Organised lunch for software engineers","urgency":"2","importance":"2"},{"id":"","name":"Linked up multiple researchers with services around the University. eg. Tom Daly and Richard Sinnott","urgency":"2","importance":"2"},{"id":"","name":"40+ engagements at the meso level across multiple faculties including ABP, FBE, Eng, Sci, MDHS, FVAS and FAM and Peter Mac, MIG and MNC, Portable Pipeline project, Mike Clark","urgency":"2","importance":"2"},{"id":"","name":"Brought together interested parties around a Digitisation at Scale working group/expert group","urgency":"2","importance":"2"},{"id":"undefined","name":"Met with most MCRIP platforms to understand high level data and compute needs","urgency":"2","importance":"3"},{"id":"","name":"Worked on understanding high level research needs for non-STEM faculties like Education, Law, ABP, FBE, Arts and Fine Arts and Music","urgency":"2","importance":"3"},{"id":"","name":"Represented UniMelb in RSE community","urgency":"2","importance":"3"},{"id":"","name":"Represented UniMelb in FAVeR community","urgency":"2","importance":"3"},{"id":"","name":"Represented UniMelb at eResearch Australasia","urgency":"2","importance":"3"},{"id":"","name":"Petition software for gathering researcher feedback","urgency":"2","importance":"3"},{"id":"","name":"Represented UoM at ABACBS BioIT meeting","urgency":"2","importance":"3"},{"id":"","name":"Excellent feedback from MCRIP platform manager in helping to bridge gap between them and US in change management situation","urgency":"1","importance":"1"},{"id":"","name":"Great feedback from Donna Hensler around my suggestions for the Short Film Archive","urgency":"1","importance":"1"},{"id":"","name":"Great feedback from Tom Daly - Given me a language to express what I was thinking","urgency":"1","importance":"1"},{"id":"","name":"Got excellent feedback from people working in software research project to catchup regularly in 2019","urgency":"1","importance":"2"},{"id":"","name":"Got excellent feedback from sysadmins to catchup regularly in 2019","urgency":"1","importance":"2"},{"id":"","name":"Got some interest in taking conversation further around Digitisation at Scale group","urgency":"1","importance":"2"},{"id":"","name":"Provided suggestions for members of the DRP","urgency":"1","importance":"3"},{"id":"","name":"Got good feedback on representing RSEs nationally and internationally","urgency":"1","importance":"3"}]
+</textarea> 
+<div style="clear:both"></div>
+<button id="clear_all">Clear All</button>
+<button id="reset_json">Reset JSON </button>
+<button id="final_report">Final Report</button>
+<div style="clear:both"></div>
+ 
+</body>
+</html>
